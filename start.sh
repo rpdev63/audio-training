@@ -4,4 +4,5 @@ rm urban8k.tgz
 python -m venv .env
 source .env/bin/activate
 pip install requirements.txt
+python data_augmentation.py
 python extract.py

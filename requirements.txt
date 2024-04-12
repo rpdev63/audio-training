@@ -8,3 +8,4 @@ optuna_dashboard==0.15.1
 keras==3.2.1
 tensorflow==2.16.1
 matplotlib==3.8.4
+audiomentations==0.35.0
