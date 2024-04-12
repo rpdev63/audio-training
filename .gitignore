@@ -1,0 +1,9 @@
+.ipynb_checkpoints/
+features_mfcc/
+UrbanSound8K/
+reshaped_features/
+saved_models/
+.env/
+*.sqlite3
+*.csv
+training_validation_accuracy.png
