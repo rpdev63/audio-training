@@ -3,6 +3,6 @@ tar -xzf urban8k.tgz
 rm urban8k.tgz
 python -m venv .env
 source .env/bin/activate
-pip install requirements.txt
+pip install -r requirements.txt
 python data_augmentation.py
 python extract.py

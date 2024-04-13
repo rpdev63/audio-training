@@ -8,10 +8,10 @@ def objective(trial):
     LEARNING_RATE = trial.suggest_loguniform('learning_rate', 5e-4, 0.05)
     BATCH_SIZE = trial.suggest_categorical(
         'batch_size', [16, 32, 64, 128, 256, 512])
-    EPOCHS = 150
-    PATIENCE = EPOCHS / 10
-    DROPOUT = trial.suggest_float('dropout_ratio', 0.05, 0.5)
-    DECAY = 0.95
+    EPOCHS = 200
+    PATIENCE = 25
+    DROPOUT = trial.suggest_float('dropout_ratio', 0.01, 0.5)
+    DECAY = 0.97
     # RS = 1
 
     model = improved_model(

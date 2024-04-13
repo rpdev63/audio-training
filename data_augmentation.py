@@ -3,12 +3,13 @@ import numpy as np
 import librosa
 import soundfile as sf
 import os
+import pandas as pd
 
 augment = Compose([
-    AddGaussianNoise(min_amplitude=0.001, max_amplitude=0.015, p=1),
-    TimeStretch(min_rate=0.8, max_rate=1.25, p=0.5),
-    PitchShift(min_semitones=-4, max_semitones=4, p=0.5),
-    Shift(min_shift=-0.5, max_shift=0.5, p=0.5),
+    # AddGaussianNoise(min_amplitude=0.001, max_amplitude=0.015, p=1),
+    # TimeStretch(min_rate=0.8, max_rate=1.25, p=0.5),
+    # PitchShift(min_semitones=-4, max_semitones=4, p=0.5),
+    Shift(min_shift=-0.5, max_shift=0.5, p=1),
 ])
 
 
@@ -40,20 +41,23 @@ for fold_path in fold_paths:
             complete_save_path = os.path.join(output_folder, output_file_name)
             sf.write(complete_save_path, augmented_audio, sample_rate)
 
-            # # Load the WAV file
-            # file_path = "UrbanSound8K/audio/fold1/7061-6-0-0.wav"
-            # audio_data, sample_rate = librosa.load(file_path, sr=None, mono=True)
 
-        # # Ensure the audio data is in the correct format (floating-point samples with a sample rate of 16000 Hz)
-        # audio_data = audio_data.astype(np.float32)
+def modify_csv():
 
-        # # Augment the audio data
-        # augmented_audio = augment(samples=audio_data, sample_rate=sample_rate)
-        # # Save the augmented audio to a new WAV file
-        # output_file_path = "output_audio_augmented.wav"
-        # output_file_path2 = "output_audio_augmented2.wav"
+    def transform_filename(filename, old, new):
+        parts = filename.split('/')
+        filename = parts[-1]
+        new_filename = filename.replace(old, new)
+        return '/'.join(parts[:-1] + [new_filename])
 
-        # augmented_audio2 = augment2(samples=audio_data, sample_rate=sample_rate)
+    df = pd.read_csv("UrbanSound8K/metadata/UrbanSound8K.csv")
+    df_copy = df.copy()
+    df_copy['slice_file_name'] = df_copy['slice_file_name'].apply(
+        transform_filename, args=(".wav", "_aug.wav"))
 
-        # sf.write(output_file_path, augmented_audio, sample_rate)
-        # sf.write(output_file_path2, augmented_audio2, sample_rate)
+    df_copy['fold'] = df_copy['fold'].apply(lambda x: str(x) + '_aug')
+    df_final = pd.concat([df, df_copy])
+    df_final.to_csv("UrbanSound8K/metadata/UrbanSound8K.csv", index=False)
+
+
+modify_csv()
