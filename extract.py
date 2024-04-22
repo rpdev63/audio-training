@@ -164,7 +164,7 @@ if __name__ == '__main__':
     output_folder = "reshaped_features"
     new_shape = (224, 224)
 
-    reshape_and_save_features(input_folder, output_folder, new_shape)
+    # reshape_and_save_features(input_folder, output_folder, new_shape)
     df = pd.read_csv(file_path)
     df["reshaped_path"] = df["mfcc_features_path"].str.replace(
         "features_mfcc", "reshaped_features")

@@ -7,3 +7,5 @@ saved_models/
 *.sqlite3
 *.csv
 training_validation_accuracy.png
+results/
+archi.ipynbb

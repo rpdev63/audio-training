@@ -17,7 +17,6 @@ def transfert_model(keep_weights=True, num_classes=10):
 
     # Add new fully connected layers
     x = Flatten()(base_model.output)
-    # num_classes is the number of classes in your dataset
     output = Dense(num_classes, activation='softmax')(x)
 
     # Create the new model

@@ -1,16 +1,27 @@
-from audiomentations import Compose, AddGaussianNoise, TimeStretch, PitchShift, Shift
+"""
+This script is designed to augment the volume of data using the original UrbanSound8k 
+dataset located in the directory with the same name by altering the original sounds.
+
+The purpose of this augmentation is to increase the diversity of the dataset by shifting 
+original sounds for improving the generalization of machine learning models trained on it.
+
+Usage:
+    python data_augmentation.py
+
+Note: Before running this script, ensure that the UrbanSound8k dataset is located 
+in the same directory as this script.
+"""
+
+import os
 import numpy as np
 import librosa
 import soundfile as sf
-import os
+from audiomentations import Compose, Shift
 
 augment = Compose([
-    AddGaussianNoise(min_amplitude=0.001, max_amplitude=0.015, p=1),
-    TimeStretch(min_rate=0.8, max_rate=1.25, p=0.5),
-    PitchShift(min_semitones=-4, max_semitones=4, p=0.5),
+
     Shift(min_shift=-0.5, max_shift=0.5, p=0.5),
 ])
-
 
 AUDIO_FOLDER = "UrbanSound8K/audio"
 audio_folder_content = os.listdir(AUDIO_FOLDER)
@@ -39,21 +50,3 @@ for fold_path in fold_paths:
                 os.makedirs(output_folder)
             complete_save_path = os.path.join(output_folder, output_file_name)
             sf.write(complete_save_path, augmented_audio, sample_rate)
-
-            # # Load the WAV file
-            # file_path = "UrbanSound8K/audio/fold1/7061-6-0-0.wav"
-            # audio_data, sample_rate = librosa.load(file_path, sr=None, mono=True)
-
-        # # Ensure the audio data is in the correct format (floating-point samples with a sample rate of 16000 Hz)
-        # audio_data = audio_data.astype(np.float32)
-
-        # # Augment the audio data
-        # augmented_audio = augment(samples=audio_data, sample_rate=sample_rate)
-        # # Save the augmented audio to a new WAV file
-        # output_file_path = "output_audio_augmented.wav"
-        # output_file_path2 = "output_audio_augmented2.wav"
-
-        # augmented_audio2 = augment2(samples=audio_data, sample_rate=sample_rate)
-
-        # sf.write(output_file_path, augmented_audio, sample_rate)
-        # sf.write(output_file_path2, augmented_audio2, sample_rate)

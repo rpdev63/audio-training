@@ -21,13 +21,12 @@ def get_data(csv_file_path, random_state=1):
     X = X.reshape(X.shape + (1,))
     y = np.array(df['labels_categorical'].tolist())
 
-    # As there is unbalance for some classes I am going to stratify it so we have the same proportion in train/test
+    # Create validation and test
     X_train, X_test, y_train, y_test = train_test_split(X,
                                                         y,
                                                         test_size=0.30,
                                                         random_state=random_state,
                                                         stratify=y)
-    # Create validation and test
     X_test, X_val, y_test, y_val = train_test_split(X_test,
                                                     y_test,
                                                     test_size=0.5,
