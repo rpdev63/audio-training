@@ -17,19 +17,24 @@ import numpy as np
 import librosa
 import soundfile as sf
 from audiomentations import Compose, Shift
+import shutil
 
 augment = Compose([
-
     Shift(min_shift=-0.5, max_shift=0.5, p=0.5),
 ])
 
 AUDIO_FOLDER = "UrbanSound8K/audio"
+AUDIO_AUGMENTED_FOLDER = "UrbanSound8K/audio_aug"
 audio_folder_content = os.listdir(AUDIO_FOLDER)
+# if not os.path.exists(AUDIO_AUGMENTED_FOLDER):
+#     os.mkdir(AUDIO_AUGMENTED_FOLDER)
+shutil.copytree(AUDIO_FOLDER, AUDIO_AUGMENTED_FOLDER)
 
 # Remove '.DS_Store' from the list
 if '.DS_Store' in audio_folder_content:
     del audio_folder_content[audio_folder_content.index('.DS_Store')]
-fold_paths = [os.path.join(AUDIO_FOLDER, rep) for rep in audio_folder_content]
+fold_paths = [os.path.join(AUDIO_FOLDER, rep)
+              for rep in audio_folder_content]
 for fold_path in fold_paths:
     for audio_file_path in os.listdir(fold_path):
         # # Load

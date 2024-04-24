@@ -4,7 +4,7 @@ import librosa
 import numpy as np
 import time
 from tqdm import tqdm
-import cv2
+import argparse
 
 
 class FeatureExtractor:
@@ -118,28 +118,6 @@ class FeatureExtractor:
         return mfccs
 
 
-def reshape_and_save_features(input_folder, output_folder, new_shape):
-    # Create output folder if it doesn't exist
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-
-    # Get a list of all files in the input folder
-    files = os.listdir(input_folder)
-
-    for file in files:
-        # Load the 2D array
-        array_2d = np.load(os.path.join(input_folder, file))
-
-        # Resize the array to the new shape
-        resized_array = cv2.resize(array_2d, new_shape)
-
-        # Save the resized array to the output folder
-        output_file = os.path.join(output_folder, file)
-        np.save(output_file, resized_array)
-
-    print("Reshaping and saving complete.")
-
-
 if __name__ == '__main__':
     fe = FeatureExtractor('UrbanSound8K/metadata/UrbanSound8K.csv')
     file_path = "extracted.csv"
@@ -157,15 +135,4 @@ if __name__ == '__main__':
     else:
         extracted_df = dataset_df.rename(
             columns={"features_path": f"{features_name}_features_path"})
-
-    extracted_df.to_csv(f"extracted.csv", index=False)
-
-    input_folder = "features_mfcc"
-    output_folder = "reshaped_features"
-    new_shape = (224, 224)
-
-    # reshape_and_save_features(input_folder, output_folder, new_shape)
-    df = pd.read_csv(file_path)
-    df["reshaped_path"] = df["mfcc_features_path"].str.replace(
-        "features_mfcc", "reshaped_features")
-    df.to_csv(file_path, index=False)
+    extracted_df.to_csv(file_path, index=False)
