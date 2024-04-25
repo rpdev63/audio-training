@@ -17,7 +17,7 @@ import numpy as np
 import librosa
 import soundfile as sf
 from audiomentations import Compose, Shift
-import shutil
+import pandas as pd
 
 augment = Compose([
     Shift(min_shift=-0.5, max_shift=0.5, p=0.5),
@@ -51,3 +51,24 @@ for fold_path in fold_paths:
                 os.makedirs(output_folder)
             complete_save_path = os.path.join(output_folder, output_file_name)
             sf.write(complete_save_path, augmented_audio, sample_rate)
+
+
+def modify_csv():
+
+    def transform_filename(filename, old, new):
+        parts = filename.split('/')
+        filename = parts[-1]
+        new_filename = filename.replace(old, new)
+        return '/'.join(parts[:-1] + [new_filename])
+
+    df = pd.read_csv("UrbanSound8K/metadata/UrbanSound8K.csv")
+    df_copy = df.copy()
+    df_copy['slice_file_name'] = df_copy['slice_file_name'].apply(
+        transform_filename, args=(".wav", "_aug.wav"))
+
+    df_copy['fold'] = df_copy['fold'].apply(lambda x: str(x) + '_aug')
+    df_final = pd.concat([df, df_copy])
+    df_final.to_csv("UrbanSound8K/metadata/UrbanSound8K.csv", index=False)
+
+
+modify_csv()
