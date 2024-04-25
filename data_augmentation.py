@@ -24,11 +24,7 @@ augment = Compose([
 ])
 
 AUDIO_FOLDER = "UrbanSound8K/audio"
-AUDIO_AUGMENTED_FOLDER = "UrbanSound8K/audio_aug"
 audio_folder_content = os.listdir(AUDIO_FOLDER)
-# if not os.path.exists(AUDIO_AUGMENTED_FOLDER):
-#     os.mkdir(AUDIO_AUGMENTED_FOLDER)
-shutil.copytree(AUDIO_FOLDER, AUDIO_AUGMENTED_FOLDER)
 
 # Remove '.DS_Store' from the list
 if '.DS_Store' in audio_folder_content:
